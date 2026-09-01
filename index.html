@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4a90e2">
+  <title>Розклад уроків 9-Б класу</title>
+  <style>
+    :root { --bg:#f0f4f8; --card:#fff; --primary:#4a90e2; --accent:#2ecc71; --classroom:#f6a609; --text:#333; --shadow:0 4px 15px rgba(0,0,0,.08); }
+    html { scroll-behavior:smooth; }
+    * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { font-family:"Segoe UI",Roboto,Helvetica,sans-serif; background:var(--bg); color:var(--text); margin:0; padding:0 0 30px; }
+    .header { background:var(--card); padding:15px; text-align:center; box-shadow:var(--shadow); position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:center; gap:10px; }
+    h1 { margin:0; font-size:1.3rem; color:var(--primary); }
+    .btn-home { position:absolute; left:15px; top:50%; transform:translateY(-50%); display:none; align-items:center; gap:6px; background:none; border:0; font-size:.9rem; font-weight:500; cursor:pointer; color:var(--primary); padding:6px 12px; border-radius:8px; }
+    .btn-home:hover { background:rgba(74,144,226,.1); }
+    .container { padding:15px; max-width:600px; margin:0 auto; }
+    .page { display:none; } .active-page { display:block; }
+    .card { background:var(--card); border-radius:15px; padding:18px; box-shadow:var(--shadow); margin-bottom:15px; border:1px solid #e1e8ed; scroll-margin-top:100px; }
+    .card-title { font-size:1.1rem; font-weight:700; border-bottom:2px solid var(--bg); padding-bottom:10px; margin-bottom:12px; color:var(--primary); }
+    .call-item { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #f0f0f0; }
+    .call-item:last-child { border-bottom:0; }
+    .call-num { font-weight:bold; color:var(--primary); width:30px; }
+    .call-time { font-family:monospace; font-size:1.1rem; flex-grow:1; text-align:center; }
+    .call-break { font-size:.75rem; color:#888; white-space:nowrap; margin-left:5px; min-width:43px; text-align:right; }
+    .main-nav-btns { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+    .big-btn { width:100%; padding:15px; border:2px solid var(--primary); border-radius:12px; background:var(--card); color:var(--primary); font-size:1rem; font-weight:bold; cursor:pointer; box-shadow:var(--shadow); transition:.2s; text-decoration:none; text-align:center; display:block; }
+    .big-btn:active { background:var(--primary); color:#fff; }
+    .btn-classroom { border-color:var(--classroom); color:var(--classroom); }
+    .btn-classroom:active { background:var(--classroom); color:#fff; }
+    .mode-switch { display:flex; gap:10px; margin-bottom:15px; }
+    .mode-btn { flex:1; padding:12px; border:0; border-radius:10px; background:#d0dbe5; font-weight:bold; cursor:pointer; color:#555; transition:.2s; font-size:.9rem; }
+    .mode-btn.active { background:var(--primary); color:#fff; box-shadow:0 2px 5px rgba(74,144,226,.3); }
+    .day-nav { display:none; position:fixed; right:10px; top:50%; transform:translateY(-50%); background:var(--card); padding:10px 5px; border-radius:15px; box-shadow:var(--shadow); z-index:90; flex-direction:column; gap:8px; }
+    .day-nav-btn { background:#eee; border:1px solid transparent; border-radius:8px; padding:8px; font-size:.75rem; font-weight:bold; color:var(--primary); text-align:center; cursor:pointer; }
+    .day-nav-btn:active { background:var(--primary); color:#fff; }
+    .lesson-item { display:flex; align-items:center; padding:12px 0; border-bottom:1px solid #f1f1f1; text-decoration:none; color:inherit; position:relative; }
+    .lesson-item:last-child { border-bottom:0; }
+    .l-time { font-size:.8rem; color:#777; min-width:98px; font-family:monospace; }
+    .l-subject { font-weight:500; flex-grow:1; padding-right:25px; line-height:1.3; }
+    .l-icon { color:var(--accent); font-size:1.1rem; position:absolute; right:0; }
+    .lesson-group { display:flex; align-items:stretch; padding:10px 0; border-bottom:1px solid #f1f1f1; }
+    .lesson-group:last-child { border-bottom:0; }
+    .lesson-group .l-time { padding-top:3px; flex-shrink:0; }
+    .lesson-group-subjects { flex-grow:1; display:flex; flex-direction:column; gap:0; }
+    .lesson-group-subjects a, .lesson-group-subjects .no-link { display:flex; align-items:center; text-decoration:none; color:inherit; padding:4px 0; position:relative; }
+    .lesson-group-subjects a:not(:last-child), .lesson-group-subjects .no-link:not(:last-child) { border-bottom:1px dashed #e8e8e8; padding-bottom:6px; margin-bottom:2px; }
+    .lesson-group-subjects .l-subject { font-weight:500; flex-grow:1; padding-right:25px; line-height:1.3; font-size:.95rem; }
+    .lesson-group-subjects .l-icon { position:absolute; right:0; top:50%; transform:translateY(-50%); }
+    .or-label { font-size:.68rem; color:#aaa; text-align:center; padding:1px 0; font-style:italic; }
+    .muted { color:#777; cursor:default; } .muted .l-subject { padding-right:0; }
+    .lesson-split { display:grid; grid-template-columns:98px 1fr 1fr; border-bottom:1px solid #f1f1f1; padding:10px 0; }
+    .lesson-split .l-time { padding-top:9px; }
+    .split-choice { min-height:46px; padding:6px 8px; display:flex; flex-direction:column; justify-content:center; text-decoration:none; color:inherit; border-left:1px dashed #e0e5ec; }
+    .split-choice:first-of-type { border-left:0; }
+    .split-choice .week { color:var(--primary); font-size:.68rem; font-weight:700; margin-bottom:2px; }
+    .split-choice .subject { font-size:.83rem; line-height:1.2; font-weight:550; }
+    .split-choice.pending { color:#777; background:#fafbfc; cursor:default; }
+    .books-note { color:#777; font-size:.9rem; margin:-3px 0 10px; }
+    @media (max-width:650px) { .container { padding:12px; } .day-nav { right:5px; } .l-time { min-width:90px; font-size:.75rem; } .lesson-split { grid-template-columns:90px 1fr 1fr; } .split-choice { padding:6px 5px; } .split-choice .subject { font-size:.76rem; } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="btn-home" id="btnHome" onclick="showPage('pageHome')">🏠 Назад</button>
+    <h1>📚 Розклад уроків 9-Б класу</h1>
+  </div>
+  <div class="day-nav" id="dayNav">
+    <button class="day-nav-btn" onclick="scrollToDay('day-Понеділок')">Пн</button>
+    <button class="day-nav-btn" onclick="scrollToDay('day-Вівторок')">Вт</button>
+    <button class="day-nav-btn" onclick="scrollToDay('day-Середа')">Ср</button>
+    <button class="day-nav-btn" onclick="scrollToDay('day-Четвер')">Чт</button>
+    <button class="day-nav-btn" onclick="scrollToDay('day-Пятниця')">Пт</button>
+  </div>
+  <div class="container">
+    <div id="pageHome" class="page active-page">
+      <div class="card"><div class="card-title">🕒 Розклад дзвінків</div><div id="bells"></div></div>
+      <div class="main-nav-btns">
+        <button class="big-btn" onclick="openSchedule('distant')">💻 Дистанційний формат</button>
+        <button class="big-btn" onclick="openSchedule('mixed')">🏫 Змішаний формат</button>
+        <a href="https://classroom.google.com/" target="_blank" rel="noopener" class="big-btn btn-classroom">🎓 Google Classroom</a>
+        <button class="big-btn" onclick="showPage('pageBooks')">📚 Підручники</button>
+      </div>
+    </div>
+    <div id="pageSchedule" class="page">
+      <div class="mode-switch"><button class="mode-btn" id="btn-distant" onclick="switchMode('distant')">Дистанційний</button><button class="mode-btn" id="btn-mixed" onclick="switchMode('mixed')">Змішаний</button></div>
+      <div id="scheduleContent"></div>
+    </div>
+    <div id="pageBooks" class="page"><div class="card"><div class="card-title">📚 Підручники</div><p class="books-note">Розділ готовий: електронні посилання можна буде додати, коли їх нададуть.</p><div id="booksList"></div></div></div>
+  </div>
+  <script>
+    const bells = [['08:00 – 08:35','(5 хв)'],['08:40 – 09:15','(20 хв)'],['09:35 – 10:10','(20 хв)'],['10:30 – 11:05','(5 хв)'],['11:10 – 11:45','(10 хв)'],['11:55 – 12:30','(5 хв)'],['12:35 – 13:10','']];
+    const links = {
+      'Українська мова':'https://us04web.zoom.us/j/5016290889?pwd=r3cXUOUhN21bguKGfZ63apOaubqa5E.1',
+      'Українська література':'https://us04web.zoom.us/j/5016290889?pwd=r3cXUOUhN21bguKGfZ63apOaubqa5E.1',
+      'Алгебра':'https://us05web.zoom.us/j/4850792151?pwd=dHdiVGdxQUtvZVZ0MUJZS2RSSlYxdz09',
+      'Геометрія':'https://us05web.zoom.us/j/4850792151?pwd=dHdiVGdxQUtvZVZ0MUJZS2RSSlYxdz09',
+      'Інформатика':'https://us05web.zoom.us/j/88529881707?pwd=Q0N3OUFjQ21rZkhqc1ZsZ1pVa0ZjQT09',
+      'Географія':'https://us05web.zoom.us/j/82227369805?pwd=JPqON2o4Yc8pKXf7brbVRya9ySTOR9.1',
+      'Німецька мова':'https://us05web.zoom.us/j/83850475288?pwd=dUlYU1hpNllzb0JUaDB3ZlRTSUY4QT09',
+      'Англійська мова':'https://us05web.zoom.us/j/2832249610?pwd=SllHa3gyZHZzZ25LTkR3eUdseEt3dz09',
+      'Драматургія':'https://us05web.zoom.us/j/2964415092?pwd=SEZYcGltOXFOUnd4cG15OTAvWnNNZz09&omn=89116864132'
+    };
+    const lang = level => ({group:[`Англійська мова (${level})`,`Німецька мова (${level})`]});
+    const scheduleData = {
+      distant: {
+        'Понеділок':['Алгебра',{weekly:[{week:'1 тиждень',subject:'Фінансова грамотність',url:null},{week:'2 тиждень',subject:'ОБЖД',url:null}]},{group:['Інформатика','Історія України (07.09)']},'Технології',lang('ІІ'),'Географія','Фізика'],
+        'Вівторок':['Фізкультура','Геометрія','Українська мова',lang('І'),'Біологія','Алгебра','Українська література'],
+        'Середа':['Українська мова','Інформатика','Всесвітня історія',lang('І'),'Алгебра','Драматургія','Фізкультура','Громадянська освіта / Правознавство'],
+        'Четвер':['Біологія','Зарубіжна література',lang('І'),'Фізкультура','Хімія','Фізика','Геометрія'],
+        'Пятниця':['Мистецтво','Історія України',lang('ІІ'),'Українська мова','Хімія','Фізика','Українська література']
+      },
+      mixed: {
+        'Понеділок':['Інформатика / Історія України (07.09)','Алгебра','Фінансова грамотність / Основи здоров’я','Географія','Фізика','Технології','Англійська мова ІІ / Німецька мова ІІ'],
+        'Вівторок':['Українська мова','Фізкультура','Англійська мова І / Німецька мова І','Українська література','Алгебра','Біологія','Геометрія','Драматургія'],
+        'Середа':['Всесвітня історія','Українська мова','Англійська мова І / Німецька мова І','Алгебра','Громадянська освіта / Правознавство','Фізкультура','Інформатика'],
+        'Четвер':['Зарубіжна література','Фізкультура','Біологія','Англійська мова І / Німецька мова І','Фізика','Геометрія','Хімія'],
+        'Пятниця':['Історія України','Українська мова','Українська література','Мистецтво','Англійська мова ІІ / Німецька мова ІІ','Хімія','Фізика']
+      }
+    };
+    const booksData = ['Українська мова','Українська література','Інформатика','Німецька мова','Хімія','Географія','Фізика','Мистецтво','Алгебра','Геометрія','Англійська мова 1','Англійська мова 2','Всесвітня історія','Історія України','Біологія','Зарубіжна література'];
+    let currentMode = 'distant';
+    function showPage(pageId) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page')); document.getElementById(pageId).classList.add('active-page'); document.getElementById('btnHome').style.display=pageId==='pageHome'?'none':'flex'; document.getElementById('dayNav').style.display=pageId==='pageSchedule'?'flex':'none'; window.scrollTo({top:0,behavior:'smooth'}); }
+    function openSchedule(mode) { currentMode=mode; showPage('pageSchedule'); renderSchedule(); }
+    function switchMode(mode) { currentMode=mode; renderSchedule(); window.scrollTo({top:0,behavior:'smooth'}); }
+    function scrollToDay(id) { document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'}); }
+    function directLink(subject) { return Object.entries(links).find(([key])=>subject.includes(key))?.[1]; }
+    function ordinaryLesson(subject,time,clickable) { const link=clickable&&directLink(subject); if (!link) return `<div class="lesson-item muted"><span class="l-time">${time}</span><span class="l-subject">${subject}</span></div>`; return `<a class="lesson-item" href="${link}" target="_blank" rel="noopener"><span class="l-time">${time}</span><span class="l-subject">${subject}</span><span class="l-icon">🔗</span></a>`; }
+    function groupedLesson(subjects,time,clickable) { const choices=subjects.map(subject=>{ const link=clickable&&directLink(subject); const tag=link?'a':'span'; const attrs=link?`href="${link}" target="_blank" rel="noopener"`:''; return `<${tag} class="${link?'split-choice':'split-choice pending'}" ${attrs}><span class="subject">${subject}${link?' 🔗':''}</span></${tag}>`; }).join(''); return `<div class="lesson-split"><span class="l-time">${time}</span>${choices}</div>`; }
+    function weeklyLesson(items,time,clickable) { const choices=items.map(item=>{ const cls=item.url&&clickable?'split-choice':'split-choice pending'; const tag=item.url&&clickable?'a':'span'; const attrs=item.url&&clickable?`href="${item.url}" target="_blank" rel="noopener"`:''; return `<${tag} class="${cls}" ${attrs}><span class="week">${item.week}</span><span class="subject">${item.subject}${item.url&&clickable?' 🔗':''}</span></${tag}>`; }).join(''); return `<div class="lesson-split"><span class="l-time">${time}</span>${choices}</div>`; }
+    function renderSchedule() { document.getElementById('btn-distant').classList.toggle('active',currentMode==='distant'); document.getElementById('btn-mixed').classList.toggle('active',currentMode==='mixed'); const clickable=currentMode==='distant'; let html=''; for(const [day,lessons] of Object.entries(scheduleData[currentMode])) { html+=`<div class="card" id="day-${day}"><div class="card-title">${day}</div>`; lessons.forEach((lesson,index)=>{const time=`${index+1}: ${bells[index]?.[0].replaceAll(' – ','-')||''}`; html+=typeof lesson==='object'&&lesson.weekly?weeklyLesson(lesson.weekly,time,clickable):typeof lesson==='object'?groupedLesson(lesson.group,time,clickable):ordinaryLesson(lesson,time,clickable);}); html+='</div>'; } document.getElementById('scheduleContent').innerHTML=html; }
+    function renderBells() { document.getElementById('bells').innerHTML=bells.map(([time,pause],index)=>`<div class="call-item"><span class="call-num">${index+1}.</span><span class="call-time">${time}</span><span class="call-break">${pause}</span></div>`).join(''); }
+    function renderBooks() { document.getElementById('booksList').innerHTML=booksData.map((book,index)=>`<div class="lesson-item muted"><span class="call-num" style="width:35px">${index+1}.</span><span class="l-subject">${book}</span></div>`).join(''); }
+    renderBells(); renderBooks(); renderSchedule();
+  </script>
+</body>
+</html>
