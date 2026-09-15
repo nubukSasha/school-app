@@ -86,25 +86,39 @@
       <div class="mode-switch"><button class="mode-btn" id="btn-distant" onclick="switchMode('distant')">Дистанційний</button><button class="mode-btn" id="btn-mixed" onclick="switchMode('mixed')">Змішаний</button></div>
       <div id="scheduleContent"></div>
     </div>
-    <div id="pageBooks" class="page"><div class="card"><div class="card-title">📚 Підручники</div><p class="books-note">Розділ готовий: електронні посилання можна буде додати, коли їх нададуть.</p><div id="booksList"></div></div></div>
+    <div id="pageBooks" class="page"><div class="card"><div class="card-title">📚 Підручники</div><p class="books-note">Оберіть предмет, щоб відкрити електронний підручник.</p><div id="booksList"></div></div></div>
   </div>
   <script>
     const bells = [['08:00 – 08:35','(5 хв)'],['08:40 – 09:15','(20 хв)'],['09:35 – 10:10','(20 хв)'],['10:30 – 11:05','(5 хв)'],['11:10 – 11:45','(10 хв)'],['11:55 – 12:30','(5 хв)'],['12:35 – 13:10','']];
     const links = {
       'Українська мова':'https://us04web.zoom.us/j/5016290889?pwd=r3cXUOUhN21bguKGfZ63apOaubqa5E.1',
       'Українська література':'https://us04web.zoom.us/j/5016290889?pwd=r3cXUOUhN21bguKGfZ63apOaubqa5E.1',
+      'Хімія':'https://us04web.zoom.us/j/3280515839?pwd=dU5CVm9xNjE0OGJCUWJ0NlZzSnBtQT09',
       'Алгебра':'https://us05web.zoom.us/j/4850792151?pwd=dHdiVGdxQUtvZVZ0MUJZS2RSSlYxdz09',
       'Геометрія':'https://us05web.zoom.us/j/4850792151?pwd=dHdiVGdxQUtvZVZ0MUJZS2RSSlYxdz09',
+      'Фізкультура':'https://us05web.zoom.us/j/2019944995?pwd=KG0qXLCNVCYqEDO7y0rdYRsaLnecIb.1&omn=87585394463',
       'Інформатика':'https://us05web.zoom.us/j/88529881707?pwd=Q0N3OUFjQ21rZkhqc1ZsZ1pVa0ZjQT09',
       'Географія':'https://us05web.zoom.us/j/82227369805?pwd=JPqON2o4Yc8pKXf7brbVRya9ySTOR9.1',
       'Німецька мова':'https://us05web.zoom.us/j/83850475288?pwd=dUlYU1hpNllzb0JUaDB3ZlRTSUY4QT09',
+      'Історія України':'https://us04web.zoom.us/j/2104211325?pwd=TnJWTWZlTzFMTThEZk5JaDNGVUhxZz09',
+      'Всесвітня історія':'https://us04web.zoom.us/j/2104211325?pwd=TnJWTWZlTzFMTThEZk5JaDNGVUhxZz09',
+      'Правознавство':'https://us04web.zoom.us/j/2104211325?pwd=TnJWTWZlTzFMTThEZk5JaDNGVUhxZz09',
+      'Громадянська освіта':'https://us04web.zoom.us/j/2104211325?pwd=TnJWTWZlTzFMTThEZk5JaDNGVUhxZz09',
+      'Фінансова грамотність':'https://us04web.zoom.us/j/73229507847?pwd=jhqCQV4qEfic9RJtBewhL0rVm3DuOX.1',
+      'Фізика':'https://us04web.zoom.us/j/73229507847?pwd=jhqCQV4qEfic9RJtBewhL0rVm3DuOX.1',
       'Англійська мова':'https://us05web.zoom.us/j/2832249610?pwd=SllHa3gyZHZzZ25LTkR3eUdseEt3dz09',
+      'Основи здоров’я':'https://us05web.zoom.us/j/81064693570?pwd=md7p1wDpI4qGP3GsqTxGcaIS4AQLh6.1',
+      'ОБЖД':'https://us05web.zoom.us/j/81064693570?pwd=md7p1wDpI4qGP3GsqTxGcaIS4AQLh6.1',
+      'Зарубіжна література':'https://us05web.zoom.us/j/85929168060?pwd=9tWXbErgL21jDm8hmJGkYaW86oGuU0.1',
+      'Біологія':'https://us04web.zoom.us/j/2914162042?pwd=zjgV8acP8N3G1yilmE7wa2jhDReGb5.1',
       'Драматургія':'https://us05web.zoom.us/j/2964415092?pwd=SEZYcGltOXFOUnd4cG15OTAvWnNNZz09&omn=89116864132'
+      ,'Мистецтво':'https://us05web.zoom.us/j/5131985836?pwd=TFFZVnRJazZhSmFGa2ZxQ3BZOTlUQT09'
+      ,'Технології':'https://us04web.zoom.us/j/2330497400?pwd=c1ovVEIrZkV3WklRWTIzWC9IUGZTZz09'
     };
     const lang = level => ({group:[`Англійська мова (${level})`,`Німецька мова (${level})`]});
     const scheduleData = {
       distant: {
-        'Понеділок':['Алгебра',{weekly:[{week:'1 тиждень',subject:'Фінансова грамотність',url:null},{week:'2 тиждень',subject:'ОБЖД',url:null}]},{group:['Інформатика','Історія України (07.09)']},'Технології',lang('ІІ'),'Географія','Фізика'],
+        'Понеділок':['Алгебра',{weekly:[{week:'1 тиждень',subject:'Фінансова грамотність',url:'https://us04web.zoom.us/j/73229507847?pwd=jhqCQV4qEfic9RJtBewhL0rVm3DuOX.1'},{week:'2 тиждень',subject:'ОБЖД',url:'https://us05web.zoom.us/j/81064693570?pwd=md7p1wDpI4qGP3GsqTxGcaIS4AQLh6.1'}]},{group:['Інформатика','Історія України (07.09)']},'Технології',lang('ІІ'),'Географія','Фізика'],
         'Вівторок':['Фізкультура','Геометрія','Українська мова',lang('І'),'Біологія','Алгебра','Українська література'],
         'Середа':['Українська мова','Інформатика','Всесвітня історія',lang('І'),'Алгебра','Драматургія','Фізкультура','Громадянська освіта / Правознавство'],
         'Четвер':['Біологія','Зарубіжна література',lang('І'),'Фізкультура','Хімія','Фізика','Геометрія'],
@@ -118,7 +132,30 @@
         'Пятниця':['Історія України','Українська мова','Українська література','Мистецтво','Англійська мова ІІ / Німецька мова ІІ','Хімія','Фізика']
       }
     };
-    const booksData = ['Українська мова','Українська література','Інформатика','Німецька мова','Хімія','Географія','Фізика','Мистецтво','Алгебра','Геометрія','Англійська мова 1','Англійська мова 2','Всесвітня історія','Історія України','Біологія','Зарубіжна література'];
+    const booksData = [
+      ['Українська мова','https://drive.google.com/drive/folders/1qtcldXsHxnXsiyB-KNhSfoJBlYcJ_Z_V'],
+      ['Українська література','https://pidruchnyk.com.ua/3242-ukr-literatura-9-klas-avramenko-2026.html'],
+      ['Інформатика','https://pidruchnyk.com.ua/3190-informatyka-9-klas-ryvkind-2026.html'],
+      ['Німецька мова','https://pidruchnyk.com.ua/3209-nimecka-mova-9-klas-sotnykova-9-i-rik-navchannia-2026.html'],
+      ['Німецька мова (друга мова)','https://pidruchnyk.com.ua/3208-nimecka-mova-9-klas-sotnykova-5-rik-navchannia-2026.html'],
+      ['Хімія','https://drive.google.com/file/d/11imu2GPhJXheGdn9oqtNwO0d7WXhmfJb/view'],
+      ['Географія','https://pidruchnyk.com.ua/3163-geografiia-9-klas-gilberg-2026.html'],
+      ['Фізика','https://pidruchnyk.com.ua/3255-fizyka-9-klas-bariakhtar-2026.html'],
+      ['Мистецтво','https://share.google/MNi0DrasMULj2xW9u'],
+      ['Алгебра','https://pidruchnyk.com.ua/3144-algebra-9-klas-tarasenkova-2026.html'],
+      ['Геометрія','https://pidruchnyk.com.ua/3169-geometriia-9-klas-burda-2026.html'],
+      ['Англійська мова 1','https://online.flippingbook.com/view/801244969/'],
+      ['Англійська мова 2','https://share.google/RDn5DcpavE3TgTNtK'],
+      ['Всесвітня історія','https://drive.google.com/file/d/1jVjL4zIKQQVttGgV_iWUzOUKmj36i32y/view?usp=sharing'],
+      ['Історія України','https://drive.google.com/file/d/1Izzf2VbXjrIvqwcZtUW8tUz_k4e2uAL3/view?usp=sharing'],
+      ['Біологія','https://pidruchnyk.com.ua/3150-biologiia-9-klas-balan-2026.html'],
+      ['Зарубіжна література',null],
+      ['Правознавство','https://drive.google.com/file/d/1-9GMXek6-5LiODfJUOp9qj1WynWRL-DT/view?usp=sharing'],
+      ['Громадянська освіта','https://drive.google.com/file/d/1W9cBeClByOcNziMVkX-WLGbB7PqJqIs3/view?usp=sharing'],
+      ['Підприємництво і фінансова грамотність','https://drive.google.com/drive/folders/1njpwH9I9PtnG2Jrmr6ui-OECXO8r8Ufl'],
+      ['Технології',null],
+      ['Основи здоров’я','https://drive.google.com/file/d/1HKqtD_Ap3TicxfPtIGRfgRk-GTC4V-lb/view']
+    ];
     let currentMode = 'distant';
     function showPage(pageId) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page')); document.getElementById(pageId).classList.add('active-page'); document.getElementById('btnHome').style.display=pageId==='pageHome'?'none':'flex'; document.getElementById('dayNav').style.display=pageId==='pageSchedule'?'flex':'none'; window.scrollTo({top:0,behavior:'smooth'}); }
     function openSchedule(mode) { currentMode=mode; showPage('pageSchedule'); renderSchedule(); }
@@ -130,7 +167,7 @@
     function weeklyLesson(items,time,clickable) { const choices=items.map(item=>{ const cls=item.url&&clickable?'split-choice':'split-choice pending'; const tag=item.url&&clickable?'a':'span'; const attrs=item.url&&clickable?`href="${item.url}" target="_blank" rel="noopener"`:''; return `<${tag} class="${cls}" ${attrs}><span class="week">${item.week}</span><span class="subject">${item.subject}${item.url&&clickable?' 🔗':''}</span></${tag}>`; }).join(''); return `<div class="lesson-split"><span class="l-time">${time}</span>${choices}</div>`; }
     function renderSchedule() { document.getElementById('btn-distant').classList.toggle('active',currentMode==='distant'); document.getElementById('btn-mixed').classList.toggle('active',currentMode==='mixed'); const clickable=currentMode==='distant'; let html=''; for(const [day,lessons] of Object.entries(scheduleData[currentMode])) { html+=`<div class="card" id="day-${day}"><div class="card-title">${day}</div>`; lessons.forEach((lesson,index)=>{const time=`${index+1}: ${bells[index]?.[0].replaceAll(' – ','-')||''}`; html+=typeof lesson==='object'&&lesson.weekly?weeklyLesson(lesson.weekly,time,clickable):typeof lesson==='object'?groupedLesson(lesson.group,time,clickable):ordinaryLesson(lesson,time,clickable);}); html+='</div>'; } document.getElementById('scheduleContent').innerHTML=html; }
     function renderBells() { document.getElementById('bells').innerHTML=bells.map(([time,pause],index)=>`<div class="call-item"><span class="call-num">${index+1}.</span><span class="call-time">${time}</span><span class="call-break">${pause}</span></div>`).join(''); }
-    function renderBooks() { document.getElementById('booksList').innerHTML=booksData.map((book,index)=>`<div class="lesson-item muted"><span class="call-num" style="width:35px">${index+1}.</span><span class="l-subject">${book}</span></div>`).join(''); }
+    function renderBooks() { document.getElementById('booksList').innerHTML=booksData.map(([book,url],index)=>url?`<a class="lesson-item" href="${url}" target="_blank" rel="noopener"><span class="call-num" style="width:35px">${index+1}.</span><span class="l-subject">${book}</span><span class="l-icon">🔗</span></a>`:`<div class="lesson-item muted"><span class="call-num" style="width:35px">${index+1}.</span><span class="l-subject">${book}</span></div>`).join(''); }
     renderBells(); renderBooks(); renderSchedule();
   </script>
 </body>
